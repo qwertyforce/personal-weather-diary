@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  
+ 
+  <meta name="theme-color" content="#c8d7e6">
+  <meta name="author" content="qwertyforce">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Tic Tac Toe">
+<title>Weather</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet prefetch'>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script  defer src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.14/vue.js"></script> 
+<script   defer src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
+<script  defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script  defer src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script  defer src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/vue-chartjs/3.3.1/vue-chartjs.min.js"></script>
+<script  defer src="./chartjs-plugin-zoom.js"></script>
+<script  defer src="./main.js"></script>
+<style>
+label{
+  margin-bottom: 0px;
+}
+.form-group{
+  margin-bottom: 10px;
+  width:auto;
+}
+.form-control{
+width:200px;
+}
+body { padding-top:56px; }
+
+.fade-enter-active, .fade-leave-active {
+  transition-property: opacity;
+  transition-duration: .25s;
+}
+
+.fade-enter-active {
+  transition-delay: .25s;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}
+select{vertical-align: baseline !important;}
+#smile{
+  background-color: #f3f3f3 !important;
+  border: 0 !important;
+  background: 0 !important;
+  padding: 0 !important;
+}
+#cntr{align-self: center  !important;
+margin:0 !important;}
+.lds-dual-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  border-color: #000 transparent #000 transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+</style>
+</head>
+<body style="background-color: #f3f3f3">
+  <div id="app">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-light"  style="
+    background-color: aliceblue;
+">
+      <router-link to="/" class="navbar-brand" >Погода</router-link>
+      <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarNav" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+             <router-link to="/diary"  class="nav-link" >Дневник</router-link>
+          </li>
+          <li class="nav-item">
+             <router-link to="/graphics" class="nav-link" >Графики</router-link>
+          </li>
+          <li class="nav-item">
+             <router-link to="/set_weather" class="nav-link" >Добавить данные</router-link>
+          </li>
+        </ul>
+        <div style="padding-left:20px ">Месяц: <select id="Stat_modes" class="custom-select" v-model="month">
+          <option value="1">Январь</option>
+           <option value="2">Февраль</option> 
+           <option value="3">Март</option>
+            <option value="4">Апрель</option>
+            <option value="5">Май</option>
+            <option value="6">Июнь</option>
+            <option value="7">Июль</option>
+            <option value="8">Август</option>
+            <option value="9">Сентябрь</option>
+            <option value="10">Октябрь </option>
+            <option value="11">Ноябрь</option>
+             <option value="12">Декабрь</option>
+          </select>
+      </div>
+       <div style="padding-left:20px ">Период Наблюдений С  
+        <select id="Stat_modes" class="custom-select" v-model="beginyear">
+          <option value="1970">1970</option>
+           <option  v-for="n in new Date().getFullYear()-1970 " :value="n+1970" >{{n+1970}}</option>
+          </select>
+          По 
+          <select id="Stat_modes" class="custom-select" v-model="endyear">
+           <option  v-for="n in new Date().getFullYear()-1970 " :value="n+1969" >{{n+1969}}</option>
+           <option :value="new Date().getFullYear()">{{new Date().getFullYear()}}</option>
+          </select>
+      </div>
+
+    </div>
+    </nav>
+
+    <div class="lds-dual-ring"  style="
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;                             
+    margin: auto;
+"   v-show="loading == true" ></div>
+    <transition name="fade" >
+        <keep-alive include="setweather">
+   <router-view v-show="loading != true" ></router-view>
+  </keep-alive>
+  </transition>
+  </div>
+</body>
+</html>
