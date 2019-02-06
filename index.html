@@ -9,7 +9,6 @@
   <meta name="author" content="qwertyforce">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Tic Tac Toe">
 <title>Weather</title>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
@@ -122,12 +121,12 @@ margin:0 !important;}
       </div>
        <div style="padding-left:20px ">Период Наблюдений С  
         <select id="Stat_modes" class="custom-select" v-model="beginyear">
-          <option value="1970">1970</option>
-           <option  v-for="n in new Date().getFullYear()-1970 " :value="n+1970" >{{n+1970}}</option>
+          <option :value="last_year_in_db">{{last_year_in_db}}</option>
+           <option  v-for="n in new Date().getFullYear()-last_year_in_db " :value="n+last_year_in_db" >{{n+last_year_in_db}}</option>
           </select>
           По 
           <select id="Stat_modes" class="custom-select" v-model="endyear">
-           <option  v-for="n in new Date().getFullYear()-1970 " :value="n+1969" >{{n+1969}}</option>
+           <option  v-for="n in new Date().getFullYear()-last_year_in_db " :value="n+last_year_in_db-1" >{{n+last_year_in_db-1}}</option>
            <option :value="new Date().getFullYear()">{{new Date().getFullYear()}}</option>
           </select>
       </div>
