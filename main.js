@@ -266,6 +266,17 @@ methods:{
   }
 
 }
+// created(){
+//    $.ajax({
+//             url: 'https://backend.4battle.ru:8080/leaderboard',
+//         }).done(function(data) {
+//   var x=JSON.parse(data)
+//   for (var i = 0; i < x.length; i++) {
+//    x[i].Username=escapeHtml(x[i].Username)
+//   }
+//   this.Leaderboard=x
+// }.bind(this));
+// }
 }
 const set_weather = { 
   name:"setweather",
@@ -383,27 +394,26 @@ const Graphics={template:`
    <button @click="reset(0)">Сбросить масштаб</button>
    <button @click="add(0)">Добавить год</button>
     <select  class="custom-select" v-model="chooseyear">
-          <option value="1970">1970</option>
-           <option  v-for="n in new Date().getFullYear()-1970 " :value="n+1970" >{{n+1970}}</option>
+           <option  v-for="n in new Date().getFullYear()-last_year_in_db+1 " :value="n+last_year_in_db-1" >{{n+last_year_in_db-1}}</option>
           </select>
   <reactive :chart-data="this.$root.fill_years()"></reactive>
   <button @click="reset(1)">Сбросить масштаб</button>
    <button @click="add(1)">Добавить год</button>
     <select  class="custom-select" v-model="chooseyear2">
-          <option value="1970">1970</option>
-           <option  v-for="n in new Date().getFullYear()-1970 " :value="n+1970" >{{n+1970}}</option>
+           <option  v-for="n in new Date().getFullYear()-last_year_in_db+1 " :value="n+last_year_in_db-1" >{{n+last_year_in_db-1}}</option>
           </select>
   <reactive :chart-data="this.$root.fill_month()"></reactive>
    
 </div>
 `,
 created () {
-  this.chooseyear=2018
-this.chooseyear2=2018
+  this.chooseyear=new Date().getFullYear()-1
+this.chooseyear2=new Date().getFullYear()-1
+this.last_year_in_db=this.$root.last_year_in_db
 },
 data:function () {
   return{
-
+last_year_in_db:1970
   }
 },
 
@@ -513,6 +523,7 @@ var app = new Vue({
 beginyear:new Date().getFullYear()-1,
   month:new Date().getMonth()+1,
   loading:true,
+  last_year_in_db:null
   }  
 },
 methods: {
@@ -602,6 +613,7 @@ beforeCreate :function (){
       }).done(function(data) {
       	 this.weather_data=JSON.parse(data)
          console.log(data)
+         this.last_year_in_db= parseInt(Object.keys(this.weather_data[1])[0])
          this.loading=false;
 }.bind(this));
       },
