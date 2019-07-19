@@ -570,11 +570,17 @@ var temperature_data=[];
 let x=[];
 var days;
 var pointBackgroundColors=[];
-days=0;
-for(y in zzz){
+days=Object.keys(zzz)[Object.keys(zzz).length-1];
+console.log(1)
+console.log(zzz)
+for(var y=1;y<=days;y++){
+  if(zzz[y]!==undefined){
 temperature_data.push(zzz[y].day_temp)
 temperature_data.push(zzz[y].day_night)
-days+=1
+  }else{
+temperature_data.push(0)
+temperature_data.push(0)
+  }
 }
 console.log(days)
 var xx=0;
