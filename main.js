@@ -175,6 +175,10 @@ Vue.component('cell-grid', {
   },
   methods: {
    check_exist: function() {
+     if(this.$root.$data.weather_data[this.$root.$data.month.toString()]===undefined){
+      return false;
+     }
+ 
     if(this.$root.$data.weather_data[this.$root.$data.month.toString()][this.k.toString()]!==undefined){
       if(this.$root.$data.weather_data[this.$root.$data.month.toString()][this.k.toString()][this.f]!==undefined){
         return true
@@ -237,12 +241,12 @@ const Diary = { template: `
     </tr>
   </thead>
   <tbody>
-    <tr v-for='(value, key, index) in Object.keys(this.$root.$data.weather_data[this.$root.$data.month.toString()][this.$root.$data.beginyear.toString()])'>
+    <tr v-for='i in 31'>
       <th scope="row" style="border-right: 2px solid rgb(176, 179, 181);border-bottom: 2px solid rgb(176, 179, 181);vertical-align: inherit;padding:0px;">
-      <span style="padding-left: 5px;">{{value}}</span>
+      <span style="padding-left: 5px;">{{i}}</span>
       </th>
       <td v-for="nn  in  get_number_of_years()" style="border-right: 2px solid rgb(176, 179, 181);border-bottom: 2px solid rgb(176, 179, 181);padding:0px;">
-      <cell-grid :k=get_offset()+nn :f=value></cell-grid>
+      <cell-grid :k=get_offset()+nn :f=i></cell-grid>
       </td>
     </tr>
   </tbody>
